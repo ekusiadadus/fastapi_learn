@@ -82,3 +82,8 @@ def update_post(id: int, post: Post):
     post_dict["id"] = id
     my_posts[index] = post_dict
     return {"message": my_posts}
+
+
+@app.get("/test")
+def get_test():
+    return {"message": "test"}
