@@ -1,0 +1,47 @@
+{
+  "remote.portsAttributes": {
+    "3000": {
+      "label": "Frontend App (Next.js)"
+    },
+    "3306": {
+      "label": "MySQL"
+    },
+    "5000": {
+      "label": "Backend API (FastAPI)"
+    },
+    "5601": {
+      "label": "OpenSearch Dashboards"
+    },
+    "8001": {
+      "label": "Nginx"
+    },
+    "8080": {
+      "label": "Adminer"
+    },
+    "9000": {
+      "label": "Minio"
+    },
+    "9001": {
+      "label": "Minio Console"
+    },
+    "9200": {
+      "label": "OpenSearch"
+    }
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "python.linting.lintOnSave": true,
+  "python.linting.pylintEnabled": false,
+  "python.linting.pycodestyleEnabled": false,
+  "python.linting.flake8Enabled": true,
+  "python.formatting.provider": "black",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "editor.formatOnSave": true,
+  "python.linting.flake8Args": ["--config flake8.conf"],
+  "python.formatting.blackArgs": ["--line-length=150", "--target-version=py39"],
+  "python.analysis.typeCheckingMode": "basic"
+}
