@@ -1,0 +1,22 @@
+# Use postgres/example user/password credentials
+version: "3.1"
+
+services:
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_ROOT_PASSWORD: root
+      POSTGRES_USER: fastapi
+      POSTGRES_PASSWORD: fastapi
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

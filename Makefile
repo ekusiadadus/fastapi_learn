@@ -4,4 +4,4 @@ print-usage:
 	# usage: make [ up ]
 
 up:
-	uvicorn main:app --reload
+	uvicorn app.main:app --reload
