@@ -1,7 +1,9 @@
-DROP TABLE IF EXISTS fastapi.products;
-CREATE TABLE products (
-  name TEXT NOT NULL,
-  price INT NOT NULL,
-  id SERIAL,
-  PRIMARY KEY (id) 
+DROP TABLE IF EXISTS fastapi.posts;
+CREATE TABLE posts (
+  id serial NOT NULL,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  published BOOlEAN NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (id)
 );

@@ -1,1 +1,1 @@
-DROP TABLE fastapi.products;
+DROP TABLE fastapi.posts;
