@@ -43,7 +43,7 @@
     "editor.wordWrapColumn": 150
   },
   "editor.formatOnSave": true,
-  "python.linting.flake8Args": ["--config flake8.conf"],
+  "python.linting.flake8Args": ["--max-line-length", "150"],
   "python.formatting.blackArgs": ["--line-length=150", "--target-version=py39"],
   "python.analysis.typeCheckingMode": "basic"
 }
