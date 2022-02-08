@@ -1,19 +1,16 @@
 from typing import List, Optional
 
-from app import oauth2
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
-from .. import models, schemas
-from ..database import engine, get_db
-
-models.Base.metadata.create_all(bind=engine)
+from .. import models, oauth2, schemas
+from ..database import get_db
 
 router = APIRouter(prefix="/posts", tags=["Posts"])
 
 
-@router.get("", response_model=List[schemas.PostOut])
+@router.get("/", response_model=List[schemas.PostOut])
 def get_posts(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(oauth2.get_current_user),
@@ -30,13 +27,11 @@ def get_posts(
         .offset(skip)
         .all()
     )
-    if not posts:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="A Post is not found")
     return posts
 
 
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
-@router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.Post)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Post)
 def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
     # # cursor.execute(f"INESRT INTO posts(title, content, published) VALUES ({post.title},{post.content},{post.published})")
     # cursor.execute("""INSERT INTO posts(title, content, published) VALUES (%s, %s, %s) RETURNING * """, (post.title, post.content, post.published))
@@ -84,7 +79,7 @@ def delete_post(id: int, db: Session = Depends(get_db), current_user: models.Use
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.put("/{id}")
+@router.put("/{id}", response_model=schemas.Post)
 def update_post(id: int, post: schemas.PostCreate, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
     # cursor.execute(
     #     """UPDATE posts SET title = %s, content = %s, published = %s WHERE id = %s RETURNING *""",
@@ -107,4 +102,4 @@ def update_post(id: int, post: schemas.PostCreate, db: Session = Depends(get_db)
         post_query.update(post.dict(), synchronize_session=False)
         db.commit()
 
-    return post_query.first()
+    return update_post
