@@ -1,1 +1,1 @@
-DROP TABLE fastapi.users;
+DROP TABLE users;
