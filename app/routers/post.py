@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from app import oauth2
 from fastapi import APIRouter, Depends, HTTPException, Response, status
-from sqlalchemy import func
+from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
@@ -21,16 +21,18 @@ def get_posts(
     skip: int = 0,
     search: Optional[str] = "",
 ):
-    posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
-    results = (
+    posts = (
         db.query(models.Post, func.count(models.Vote.post_id).label("votes"))
         .join(models.Vote, models.Vote.post_id == models.Post.id, isouter=True)
         .group_by(models.Post.id)
+        .filter(or_(models.Post.title.contains(search), models.Post.content.contains(search)))
+        .limit(limit)
+        .offset(skip)
         .all()
     )
     if not posts:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="A Post is not found")
-    return results
+    return posts
 
 
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
@@ -48,12 +50,18 @@ def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db), curren
     return new_post
 
 
-@router.get("/{id}")
+@router.get("/{id}", response_model=schemas.PostOut)
 def get_post(id: int, db: Session = Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):
     # cursor.execute("""SELECT * from posts WHERE id = %s """, (str(id),))
     # post = cursor.fetchone()
     # print(post)
-    post = db.query(models.Post).filter(models.Post.id == id).first()
+    post = (
+        db.query(models.Post, func.count(models.Vote.post_id).label("votes"))
+        .join(models.Vote, models.Vote.post_id == models.Post.id, isouter=True)
+        .group_by(models.Post.id)
+        .filter(models.Post.id == id)
+        .first()
+    )
     if not post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"post with id: {id} was not found")
     return post
