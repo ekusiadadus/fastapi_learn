@@ -1,7 +1,8 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr, conint
+from pydantic import BaseModel, EmailStr
+from pydantic.types import conint
 
 
 class PostBase(BaseModel):
@@ -23,11 +24,9 @@ class UserOut(BaseModel):
         orm_mode = True
 
 
-class Post(BaseModel):
+class Post(PostBase):
     id: int
-    title: str
-    content: str
-    published: bool
+    created_at: datetime
     user_id: int
     user: UserOut
 
