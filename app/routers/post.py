@@ -21,6 +21,8 @@ def get_posts(
     search: Optional[str] = "",
 ):
     posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
+    if not posts:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="A Post is not found")
     return posts
 
 
