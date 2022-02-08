@@ -2,6 +2,7 @@ from typing import List, Optional
 
 from app import oauth2
 from fastapi import APIRouter, Depends, HTTPException, Response, status
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
@@ -12,7 +13,7 @@ models.Base.metadata.create_all(bind=engine)
 router = APIRouter(prefix="/posts", tags=["Posts"])
 
 
-@router.get("", response_model=List[schemas.Post])
+@router.get("", response_model=List[schemas.PostOut])
 def get_posts(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(oauth2.get_current_user),
@@ -21,9 +22,15 @@ def get_posts(
     search: Optional[str] = "",
 ):
     posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
+    results = (
+        db.query(models.Post, func.count(models.Vote.post_id).label("votes"))
+        .join(models.Vote, models.Vote.post_id == models.Post.id, isouter=True)
+        .group_by(models.Post.id)
+        .all()
+    )
     if not posts:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="A Post is not found")
-    return posts
+    return results
 
 
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
