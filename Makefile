@@ -5,3 +5,6 @@ print-usage:
 
 up:
 	uvicorn app.main:app --reload
+
+test:
+	pytest -s -v
