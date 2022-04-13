@@ -1,1 +1,2 @@
-DROP TABLE users;
+DROP TABLE fastapi.users;
+DROP TABLE fastapi_test.users;
