@@ -2,7 +2,7 @@ usage:
 	@echo Usage: make '[ up | migrate-up | migrate-down | migrate-force | migrate-create | setup ]'
 	@echo ref: https://github.com/golang-migrate/migrate
 
-MYSQL_URL='postgres://fastapi:fastapi@127.0.0.1:5432/fastapi?sslmode=disable'
+MYSQL_URL='mysql://fastapi:fastapi@(127.0.0.1:3306)/fastapi?charset=utf8mb4'
 # MYSQL_URL='mysql://hrag:hrag@(127.0.0.1:3306)/hrag?charset=utf8mb4'
 
 up:
