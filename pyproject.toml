@@ -16,7 +16,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 
 [tool.poetry.dev-dependencies]
-flake8 = "^4.0.1"
+flake8 = "^6.0.0"
 black = {version = "^22.1.0", allow-prereleases = true}
 
 [build-system]
